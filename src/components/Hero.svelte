@@ -58,7 +58,20 @@
     <div class="hero-image-wrap">
       <div class="image-frame">
         {#if !imgError}
-          <img src={personal.image} alt={`Foto de ${personal.name}`} class="profile-img" on:error={() => imgError = true} />
+          <!--
+            fetchpriority="high": diz ao browser que essa imagem é LCP,
+            deve ser priorizada no carregamento.
+            decoding="async": não bloqueia a thread principal ao decodificar.
+            Não usar loading="lazy" aqui pois é above-the-fold.
+          -->
+          <img
+            src={personal.image}
+            alt={`Foto de ${personal.name}`}
+            class="profile-img"
+            fetchpriority="high"
+            decoding="async"
+            on:error={() => imgError = true}
+          />
         {:else}
           <div class="img-initials" aria-label="Guilherme Moreli">
             <span class="initials-text">GM</span>

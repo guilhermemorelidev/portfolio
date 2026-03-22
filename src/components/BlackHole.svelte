@@ -10,7 +10,6 @@
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
     // ── Offscreen canvas — grade de pontos + linha (nunca muda) ───
-    // Recriado só no resize, copiado com drawImage() a cada frame
     let offscreen: HTMLCanvasElement | null = null;
 
     function buildOffscreen() {
@@ -19,7 +18,6 @@
       offscreen.height = H;
       const oc = offscreen.getContext('2d')!;
 
-      // Grade de pontos
       const spacing = 32;
       oc.fillStyle = 'rgba(255,255,255,0.045)';
       for (let x = spacing; x < W; x += spacing) {
@@ -30,7 +28,6 @@
         }
       }
 
-      // Linha horizontal sutil
       const lineGrad = oc.createLinearGradient(0, 0, W, 0);
       lineGrad.addColorStop(0,    'transparent');
       lineGrad.addColorStop(0.35, 'rgba(139,92,246,0.12)');
@@ -47,13 +44,10 @@
     function resize() {
       W = canvas.width  = canvas.offsetWidth;
       H = canvas.height = canvas.offsetHeight;
-      buildOffscreen(); // reconstrói a grade com as novas dimensões
-
-      // Se animação desativada, repinta estático imediatamente
+      buildOffscreen();
       if (prefersReducedMotion.matches) renderStatic();
     }
 
-    // ── Orbs ──────────────────────────────────────────────────────
     interface Orb {
       x: number; y: number; vx: number; vy: number;
       r: number; hue: number; sat: number;
@@ -66,7 +60,6 @@
       { x: 0.45, y: 0.35, vx: -0.00007, vy: -0.00009, r: 0.32, hue: 210, sat: 50 },
     ];
 
-    // ── Renderização base (fundo + orbs + offscreen) ──────────────
     function renderBase() {
       ctx.fillStyle = '#09090f';
       ctx.fillRect(0, 0, W, H);
@@ -83,7 +76,6 @@
         ctx.fillRect(0, 0, W, H);
       }
 
-      // Cola a grade pré-renderizada — muito mais rápido que recriar
       if (offscreen) ctx.drawImage(offscreen, 0, 0);
     }
 
@@ -106,7 +98,30 @@
       animId = requestAnimationFrame(draw);
     }
 
-    // ── Init ─────────────────────────────────────────────────────
+    function startAnimation() {
+      if (!prefersReducedMotion.matches && !animId) {
+        draw();
+      }
+    }
+
+    function stopAnimation() {
+      if (animId) {
+        cancelAnimationFrame(animId);
+        animId = 0;
+      }
+    }
+
+    // ── Pausa quando a aba fica oculta ────────────────────────────
+    function onVisibilityChange() {
+      if (document.hidden) {
+        stopAnimation();
+      } else {
+        startAnimation();
+      }
+    }
+
+    document.addEventListener('visibilitychange', onVisibilityChange);
+
     resize();
 
     if (prefersReducedMotion.matches) {
@@ -119,8 +134,9 @@
     ro.observe(canvas);
 
     return () => {
-      cancelAnimationFrame(animId);
+      stopAnimation();
       ro.disconnect();
+      document.removeEventListener('visibilitychange', onVisibilityChange);
     };
   });
 </script>

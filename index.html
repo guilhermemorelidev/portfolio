@@ -14,9 +14,21 @@
 
     <title>Guilherme Moreli — Desenvolvedor</title>
 
-    <!-- GSAP + ScrollTrigger via CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <!-- Preconnect para o Google Fonts — reduz latência de DNS/TLS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Preconnect para o CDN do GSAP -->
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" />
+
+    <!--
+      GSAP + ScrollTrigger via CDN
+      defer: não bloqueia o parsing do HTML.
+      O initGsap() em App.svelte só roda após introDone=true,
+      então o GSAP sempre estará pronto quando for chamado.
+    -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
   </head>
   <body>
     <div id="app"></div>
