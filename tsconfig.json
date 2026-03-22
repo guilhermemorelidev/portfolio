@@ -11,12 +11,11 @@
     "esModuleInterop": true,
     "lib": ["ESNext", "DOM"],
     "skipLibCheck": true,
-    "paths": {}
+    "baseUrl": ".",
+    "paths": {
+      "../lib/*": ["src/lib/*"]
+    }
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.svelte"],
-  "references": [{ "path": "./tsconfig.node.json" }],
-  "baseUrl": ".",
-  "paths": {
-  "../lib/*": ["src/lib/*"]
-}
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

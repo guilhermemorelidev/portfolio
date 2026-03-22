@@ -91,7 +91,7 @@
 {#if modalOpen}
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
-  <div class="modal-backdrop" on:click={handleBackdrop} role="dialog" aria-modal="true" aria-label="Formulário de contato">
+  <div class="modal-backdrop" on:click={handleBackdrop} role="dialog" aria-modal="true" aria-label="Formulário de contato" tabindex="-1">
     <div class="modal glass-card">
       <div class="modal-header">
         <h3 class="modal-title">Enviar mensagem</h3>
