@@ -1,21 +1,8 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { personal } from '../lib/data';
-
-  let el: HTMLElement;
-  let visible = false;
-
-  onMount(() => {
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { visible = true; obs.disconnect(); } },
-      { threshold: 0.2 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  });
 </script>
 
-<section id="about" bind:this={el} class="section" class:visible>
+<section id="about" class="section">
   <div class="section-inner">
     <div class="section-label">
       <span class="label-line"></span>
@@ -63,7 +50,7 @@
           <span class="card-icon">🎓</span>
           <div>
             <span class="card-key">Formação</span>
-            <span class="card-val">ADS — Em andamento</span>
+            <span class="card-val">Ensino Médio + SENAI</span>
           </div>
         </div>
         <div class="card-divider"></div>
@@ -71,7 +58,7 @@
           <span class="card-icon">🌐</span>
           <div>
             <span class="card-key">Disponibilidade</span>
-            <span class="card-val">Freela & CLT</span>
+            <span class="card-val">Freela & Projetos</span>
           </div>
         </div>
         <div class="card-divider"></div>
@@ -107,7 +94,6 @@
     color: rgba(255,255,255,0.48);
     line-height: 1.8;
     font-size: 0.95rem;
-    font-weight: 400;
   }
 
   .about-cta {

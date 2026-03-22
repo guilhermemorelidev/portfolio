@@ -1,6 +1,15 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import { personal } from '../lib/data';
+
   let imgError = false;
+  let scrolled = false;
+
+  onMount(() => {
+    const handler = () => { if (window.scrollY > 80) scrolled = true; };
+    window.addEventListener('scroll', handler, { passive: true });
+    return () => window.removeEventListener('scroll', handler);
+  });
 </script>
 
 <section id="hero" class="hero">
@@ -73,8 +82,8 @@
   </div>
 </section>
 
-<!-- Scroll hint FORA da section — posição fixa na viewport, não sobrepõe as stats -->
-<div class="scroll-hint" aria-hidden="true">
+<!-- Scroll hint: fixo na viewport, some ao rolar, oculto no mobile -->
+<div class="scroll-hint" class:hidden={scrolled} aria-hidden="true">
   <div class="scroll-line"></div>
   <span>scroll</span>
 </div>
@@ -87,8 +96,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    /* padding-bottom extra para as stats não ficarem atrás do scroll hint */
-    padding: 6rem 2rem 7rem;
+    padding: 6rem 2rem 6rem;
     overflow: visible;
   }
 
@@ -103,10 +111,7 @@
     overflow: visible;
   }
 
-  .hero-text {
-    overflow: visible;
-    padding-right: 0.5rem;
-  }
+  .hero-text { overflow: visible; padding-right: 0.5rem; }
 
   .hero-badge {
     display: inline-flex;
@@ -117,8 +122,8 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: rgba(255,255,255,0.5);
-    background: rgba(139, 92, 246, 0.08);
-    border: 1px solid rgba(139, 92, 246, 0.18);
+    background: rgba(139,92,246,0.08);
+    border: 1px solid rgba(139,92,246,0.18);
     padding: 0.3rem 0.85rem;
     border-radius: 999px;
     margin-bottom: 2rem;
@@ -132,10 +137,7 @@
     flex-shrink: 0;
   }
 
-  @keyframes blink {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.25; }
-  }
+  @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.25; } }
 
   .hero-name {
     font-family: 'DM Serif Display', Georgia, serif;
@@ -165,28 +167,22 @@
   .hero-role {
     font-family: var(--font-mono);
     font-size: 0.85rem;
-    color: rgba(139, 92, 246, 0.75);
+    color: rgba(139,92,246,0.75);
     margin: 0 0 1.25rem;
     letter-spacing: 0.02em;
   }
 
-  .role-prefix { color: rgba(249, 115, 22, 0.6); }
+  .role-prefix { color: rgba(249,115,22,0.6); }
 
   .hero-tagline {
     font-size: 1rem;
-    font-weight: 400;
     color: rgba(255,255,255,0.42);
     line-height: 1.7;
     margin: 0 0 2.5rem;
     max-width: 380px;
   }
 
-  .hero-actions {
-    display: flex;
-    gap: 0.75rem;
-    flex-wrap: wrap;
-    margin-bottom: 3rem;
-  }
+  .hero-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 3rem; }
 
   .btn {
     display: inline-flex;
@@ -202,11 +198,11 @@
   }
 
   .btn-primary {
-    background: rgba(139, 92, 246, 0.12);
-    border: 1px solid rgba(139, 92, 246, 0.4);
+    background: rgba(139,92,246,0.12);
+    border: 1px solid rgba(139,92,246,0.4);
     color: #c4b5fd;
   }
-  .btn-primary:hover { background: rgba(139, 92, 246, 0.22); border-color: rgba(139, 92, 246, 0.75); transform: translateY(-1px); }
+  .btn-primary:hover { background: rgba(139,92,246,0.22); border-color: rgba(139,92,246,0.75); transform: translateY(-1px); }
 
   .btn-secondary {
     background: rgba(255,255,255,0.04);
@@ -215,11 +211,7 @@
   }
   .btn-secondary:hover { background: rgba(255,255,255,0.08); border-color: rgba(255,255,255,0.2); color: #fff; transform: translateY(-1px); }
 
-  .hero-stats {
-    display: flex;
-    align-items: center;
-    gap: 2rem;
-  }
+  .hero-stats { display: flex; align-items: center; gap: 2rem; }
 
   .stat-number {
     display: block;
@@ -240,11 +232,7 @@
     text-transform: uppercase;
   }
 
-  .stat-divider {
-    width: 1px; height: 28px;
-    background: rgba(255,255,255,0.08);
-    flex-shrink: 0;
-  }
+  .stat-divider { width: 1px; height: 28px; background: rgba(255,255,255,0.08); flex-shrink: 0; }
 
   .hero-image-wrap {
     position: relative;
@@ -258,8 +246,8 @@
     width: 360px; height: 420px;
     border-radius: 20px;
     overflow: hidden;
-    border: 1px solid rgba(139, 92, 246, 0.18);
-    background: rgba(139, 92, 246, 0.05);
+    border: 1px solid rgba(139,92,246,0.18);
+    background: rgba(139,92,246,0.05);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -286,7 +274,6 @@
     background-clip: text;
     -webkit-text-fill-color: transparent;
     line-height: 1;
-    letter-spacing: -0.02em;
   }
 
   .initials-hint { font-size: 0.72rem; color: rgba(255,255,255,0.2); line-height: 1.6; }
@@ -296,7 +283,7 @@
     position: absolute;
     width: 32px; height: 32px;
     z-index: 3;
-    border-color: rgba(249, 115, 22, 0.4);
+    border-color: rgba(249,115,22,0.4);
     border-style: solid;
   }
   .deco-tl { top:-6px; left:-6px; border-width:1.5px 0 0 1.5px; border-radius:3px 0 0 0; }
@@ -313,10 +300,13 @@
     pointer-events: none;
   }
 
-  /* ── Scroll hint — fixo na viewport, abaixo do fold, centralizado ── */
+  /* ── Scroll hint ──
+     - position: fixed para não sobrepor o conteúdo
+     - display: none em mobile (hover:none = touch device)
+     - desaparece com fade quando o usuário começa a rolar
+  ── */
   .scroll-hint {
     position: fixed;
-    /* Coloca no rodapé da viewport sem sobrepor conteúdo */
     bottom: 2rem;
     left: 50%;
     transform: translateX(-50%);
@@ -330,9 +320,13 @@
     letter-spacing: 0.16em;
     text-transform: uppercase;
     pointer-events: none;
-    animation: fadeHint 1s ease 3.2s both;
-    /* Desaparece quando o usuário começa a rolar */
+    /* aparece depois da animação de intro */
+    animation: fadeHint 1s ease 3.5s both;
+    transition: opacity 0.4s ease;
   }
+
+  /* Some ao rolar */
+  .scroll-hint.hidden { opacity: 0; }
 
   @keyframes fadeHint { from { opacity: 0; } to { opacity: 1; } }
 
@@ -347,9 +341,13 @@
     50% { transform: scaleY(0.45); opacity: 0.25; }
   }
 
+  /* Oculto em dispositivos touch (mobile/tablet) */
+  @media (hover: none) {
+    .scroll-hint { display: none; }
+  }
+
   @media (max-width: 960px) {
     .hero-inner { grid-template-columns: 1fr; gap: 3rem; text-align: center; }
-    .hero { padding-bottom: 6rem; }
     .hero-tagline { max-width: 100%; margin-left: auto; margin-right: auto; }
     .hero-actions { justify-content: center; }
     .hero-stats { justify-content: center; }

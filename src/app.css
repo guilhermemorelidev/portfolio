@@ -44,19 +44,20 @@ body {
 ::selection { background: rgba(139,92,246,0.3); color: #fff; }
 
 /* ----------------------------------------------------------------
-   .section — sem opacity nem transform aqui.
-   O GSAP anima os elementos INTERNOS (labels, títulos, cards).
-   A seção container nunca fica invisível para o ScrollTrigger
-   conseguir calcular as posições corretamente.
+   CRÍTICO: .section NÃO tem opacity nem transform.
+   O GSAP anima os elementos internos (labels, títulos, cards).
+   Se a section tiver opacity:0, o ScrollTrigger não consegue
+   calcular as posições e as animações travam ou nunca disparam.
    ---------------------------------------------------------------- */
 .section {
   position: relative;
   z-index: 1;
   padding: 6rem 2rem;
+  /* SEM opacity, SEM transform, SEM transition aqui */
 }
 
-/* Remover quaisquer resquícios de .section.visible que possam existir */
-.section.visible { /* intencionalmente vazio */ }
+/* .visible existe só para não quebrar componentes que ainda usam class:visible */
+.section.visible {}
 
 .section-inner {
   max-width: 1160px;

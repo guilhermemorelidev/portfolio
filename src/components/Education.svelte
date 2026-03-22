@@ -1,21 +1,8 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { education } from '../lib/data';
-
-  let el: HTMLElement;
-  let visible = false;
-
-  onMount(() => {
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { visible = true; obs.disconnect(); } },
-      { threshold: 0.1 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  });
 </script>
 
-<section id="education" bind:this={el} class="section" class:visible>
+<section id="education" class="section">
   <div class="section-inner">
     <div class="section-label">
       <span class="label-line"></span>
@@ -27,20 +14,13 @@
     </h2>
 
     <div class="timeline">
-      {#each education as item, i}
-        <div
-          class="timeline-item"
-          style="transition-delay: {i * 0.12}s"
-        >
-          <!-- Linha e ponto da timeline -->
+      {#each education as item}
+        <div class="timeline-item">
           <div class="timeline-track">
             <div class="timeline-dot"></div>
-            {#if i < education.length - 1}
-              <div class="timeline-line"></div>
-            {/if}
+            <div class="timeline-line"></div>
           </div>
 
-          <!-- Conteúdo -->
           <div class="timeline-content glass-card">
             <div class="edu-header">
               <span class="edu-period">{item.period}</span>
@@ -71,12 +51,13 @@
     align-items: start;
   }
 
-  /* Track — linha vertical e ponto */
   .timeline-track {
     display: flex;
     flex-direction: column;
     align-items: center;
     padding-top: 1.5rem;
+    /* altura suficiente para a linha conectar ao próximo item */
+    min-height: 100%;
   }
 
   .timeline-dot {
@@ -98,7 +79,11 @@
     margin-top: 6px;
   }
 
-  /* Card de conteúdo */
+  /* Esconde a linha do último item */
+  .timeline-item:last-child .timeline-line {
+    display: none;
+  }
+
   .timeline-content {
     padding: 1.5rem;
     margin-bottom: 1.5rem;
@@ -150,9 +135,6 @@
   }
 
   @media (max-width: 640px) {
-    .timeline-item {
-      grid-template-columns: 28px 1fr;
-      gap: 1rem;
-    }
+    .timeline-item { grid-template-columns: 28px 1fr; gap: 1rem; }
   }
 </style>

@@ -1,23 +1,9 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
   import { personal } from '../lib/data';
 
-  let el: HTMLElement;
-  let visible = false;
-
-  // Modal state
   let modalOpen = false;
   let subject = '';
   let message = '';
-
-  onMount(() => {
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { visible = true; obs.disconnect(); } },
-      { threshold: 0.2 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
-  });
 
   function openModal() { modalOpen = true; subject = ''; message = ''; }
   function closeModal() { modalOpen = false; }
@@ -39,7 +25,7 @@
 
 <svelte:window on:keydown={handleKey} />
 
-<section id="contact" bind:this={el} class="section" class:visible>
+<section id="contact" class="section">
   <div class="section-inner">
     <div class="section-label">
       <span class="label-line"></span>
@@ -47,7 +33,6 @@
     </div>
 
     <div class="contact-wrap">
-      <!-- Texto -->
       <div class="contact-text">
         <h2 class="section-title">
           Vamos <span class="accent">trabalhar</span><br />juntos?
@@ -58,7 +43,6 @@
         </p>
 
         <div class="contact-links">
-          <!-- Email — abre modal -->
           <button class="contact-link email-link" on:click={openModal}>
             <span class="link-icon">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -69,7 +53,6 @@
             <span>{personal.email}</span>
           </button>
 
-          <!-- GitHub -->
           <a href={personal.github} target="_blank" rel="noopener noreferrer" class="contact-link">
             <span class="link-icon">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -79,7 +62,6 @@
             <span>GitHub</span>
           </a>
 
-          <!-- LinkedIn -->
           <a href={personal.linkedin} target="_blank" rel="noopener noreferrer" class="contact-link">
             <span class="link-icon">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -91,7 +73,6 @@
         </div>
       </div>
 
-      <!-- CTA card -->
       <div class="contact-cta glass-card">
         <div class="cta-glow" aria-hidden="true"></div>
         <h3 class="cta-heading">Pronto para começar?</h3>
@@ -107,7 +88,6 @@
   </div>
 </section>
 
-<!-- Modal de email -->
 {#if modalOpen}
   <!-- svelte-ignore a11y-click-events-have-key-events -->
   <!-- svelte-ignore a11y-no-static-element-interactions -->
@@ -129,24 +109,12 @@
 
       <div class="modal-field">
         <label class="field-label" for="subject">Assunto</label>
-        <input
-          id="subject"
-          class="field-input"
-          type="text"
-          placeholder="Ex: Proposta de projeto, Dúvida..."
-          bind:value={subject}
-        />
+        <input id="subject" class="field-input" type="text" placeholder="Ex: Proposta de projeto..." bind:value={subject} />
       </div>
 
       <div class="modal-field">
         <label class="field-label" for="message">Mensagem</label>
-        <textarea
-          id="message"
-          class="field-input field-textarea"
-          placeholder="Olá Guilherme, gostaria de..."
-          bind:value={message}
-          rows="5"
-        ></textarea>
+        <textarea id="message" class="field-input field-textarea" placeholder="Olá Guilherme, gostaria de..." bind:value={message} rows="5"></textarea>
       </div>
 
       <div class="modal-actions">
@@ -179,13 +147,8 @@
     max-width: 400px;
   }
 
-  .contact-links {
-    display: flex;
-    flex-direction: column;
-    gap: 0;
-  }
+  .contact-links { display: flex; flex-direction: column; gap: 0; }
 
-  /* Botão e link de contato — mesmo visual */
   .contact-link {
     display: inline-flex;
     align-items: center;
@@ -208,20 +171,14 @@
   }
 
   .contact-link:last-child { border-bottom: none; }
-
-  .contact-link:hover {
-    color: rgba(255,255,255,0.88);
-    padding-left: 4px;
-  }
-
+  .contact-link:hover { color: rgba(255,255,255,0.88); padding-left: 4px; }
   .email-link:hover { color: #c4b5fd; }
 
   .link-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 32px;
-    height: 32px;
+    width: 32px; height: 32px;
     border-radius: 7px;
     background: rgba(139,92,246,0.08);
     border: 1px solid rgba(139,92,246,0.12);
@@ -236,7 +193,6 @@
     color: #a78bfa;
   }
 
-  /* CTA card */
   .contact-cta {
     padding: 2.25rem;
     position: relative;
@@ -246,11 +202,9 @@
 
   .cta-glow {
     position: absolute;
-    top: -50%;
-    left: 50%;
+    top: -50%; left: 50%;
     transform: translateX(-50%);
-    width: 180px;
-    height: 180px;
+    width: 180px; height: 180px;
     border-radius: 50%;
     background: radial-gradient(circle, rgba(139,92,246,0.18), transparent 70%);
     pointer-events: none;
@@ -283,7 +237,6 @@
     font-size: 0.875rem;
     font-weight: 500;
     font-family: var(--font-sans);
-    text-decoration: none;
     padding: 0.8rem 1.6rem;
     border-radius: 9px;
     transition: all 0.22s ease;
@@ -299,7 +252,7 @@
     transform: translateY(-2px);
   }
 
-  /* ---- MODAL ---- */
+  /* Modal */
   .modal-backdrop {
     position: fixed;
     inset: 0;
@@ -313,10 +266,7 @@
     animation: fadeIn 0.18s ease;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
   .modal {
     width: 100%;
@@ -346,8 +296,7 @@
   }
 
   .modal-close {
-    width: 30px;
-    height: 30px;
+    width: 30px; height: 30px;
     border-radius: 6px;
     border: 1px solid rgba(255,255,255,0.08);
     background: rgba(255,255,255,0.04);
@@ -360,10 +309,7 @@
     flex-shrink: 0;
   }
 
-  .modal-close:hover {
-    background: rgba(255,255,255,0.09);
-    color: rgba(255,255,255,0.85);
-  }
+  .modal-close:hover { background: rgba(255,255,255,0.09); color: rgba(255,255,255,0.85); }
 
   .modal-to {
     display: flex;
@@ -413,12 +359,7 @@
   }
 
   .field-input::placeholder { color: rgba(255,255,255,0.22); }
-
-  .field-input:focus {
-    border-color: rgba(139,92,246,0.45);
-    background: rgba(139,92,246,0.04);
-  }
-
+  .field-input:focus { border-color: rgba(139,92,246,0.45); background: rgba(139,92,246,0.04); }
   .field-textarea { line-height: 1.6; }
 
   .modal-actions {
@@ -440,10 +381,7 @@
     transition: all 0.2s;
   }
 
-  .btn-cancel:hover {
-    background: rgba(255,255,255,0.08);
-    color: rgba(255,255,255,0.75);
-  }
+  .btn-cancel:hover { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.75); }
 
   .btn-send {
     display: inline-flex;
@@ -461,17 +399,10 @@
     transition: all 0.2s;
   }
 
-  .btn-send:hover {
-    background: rgba(139,92,246,0.28);
-    border-color: rgba(139,92,246,0.7);
-    color: #fff;
-  }
+  .btn-send:hover { background: rgba(139,92,246,0.28); border-color: rgba(139,92,246,0.7); color: #fff; }
 
   @media (max-width: 900px) {
-    .contact-wrap {
-      grid-template-columns: 1fr;
-      gap: 2.5rem;
-    }
+    .contact-wrap { grid-template-columns: 1fr; gap: 2.5rem; }
     .contact-desc { max-width: 100%; }
   }
 </style>

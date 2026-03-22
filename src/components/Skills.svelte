@@ -2,20 +2,22 @@
   import { onMount } from 'svelte';
   import { skills } from '../lib/data';
 
-  let el: HTMLElement;
-  let visible = false;
+  // barsVisible controla APENAS a largura das barras de progresso
+  // A seção em si nunca fica invisível — o GSAP anima os cards
+  let barsVisible = false;
+  let barsEl: HTMLElement;
 
   onMount(() => {
     const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { visible = true; obs.disconnect(); } },
-      { threshold: 0.15 }
+      ([entry]) => { if (entry.isIntersecting) { barsVisible = true; obs.disconnect(); } },
+      { threshold: 0.1 }
     );
-    obs.observe(el);
+    obs.observe(barsEl);
     return () => obs.disconnect();
   });
 </script>
 
-<section id="skills" bind:this={el} class="section" class:visible>
+<section id="skills" class="section">
   <div class="section-inner">
     <div class="section-label">
       <span class="label-line"></span>
@@ -26,20 +28,18 @@
       Minha <span class="accent">stack</span>
     </h2>
 
-    <div class="skills-grid">
+    <!-- bind:this aqui para o observer das barras -->
+    <div class="skills-grid" bind:this={barsEl}>
       {#each skills as category, ci}
-        <div
-          class="skill-category glass-card"
-          style="transition-delay: {ci * 0.12}s"
-        >
+        <div class="skill-category glass-card">
           <div class="cat-header">
             <span class="cat-icon">{category.icon}</span>
             <h3 class="cat-title">{category.category}</h3>
           </div>
 
           <div class="skill-list">
-            {#each category.items as skill, si}
-              <div class="skill-item" style="transition-delay: {ci * 0.12 + si * 0.06}s">
+            {#each category.items as skill}
+              <div class="skill-item">
                 <div class="skill-meta">
                   <span class="skill-name">{skill.name}</span>
                   <span class="skill-pct">{skill.level}%</span>
@@ -47,7 +47,7 @@
                 <div class="skill-bar-bg">
                   <div
                     class="skill-bar-fill"
-                    style="width: {visible ? skill.level : 0}%"
+                    style="width: {barsVisible ? skill.level : 0}%"
                   ></div>
                 </div>
               </div>
@@ -57,7 +57,6 @@
       {/each}
     </div>
 
-    <!-- Badges de tech extras -->
     <div class="tech-badges">
       <span class="section-sub">Outras tecnologias</span>
       <div class="badges-list">
@@ -77,9 +76,7 @@
     margin-top: 3rem;
   }
 
-  .skill-category {
-    padding: 1.75rem;
-  }
+  .skill-category { padding: 1.75rem; }
 
   .cat-header {
     display: flex;
@@ -101,11 +98,7 @@
     margin: 0;
   }
 
-  .skill-list {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
+  .skill-list { display: flex; flex-direction: column; gap: 1rem; }
 
   .skill-meta {
     display: flex;
@@ -113,17 +106,8 @@
     margin-bottom: 0.4rem;
   }
 
-  .skill-name {
-    font-size: 0.87rem;
-    color: rgba(255,255,255,0.7);
-    font-weight: 500;
-  }
-
-  .skill-pct {
-    font-size: 0.75rem;
-    color: rgba(139,92,246,0.7);
-    font-family: monospace;
-  }
+  .skill-name { font-size: 0.87rem; color: rgba(255,255,255,0.7); font-weight: 500; }
+  .skill-pct  { font-size: 0.75rem; color: rgba(139,92,246,0.7); font-family: monospace; }
 
   .skill-bar-bg {
     height: 3px;
@@ -136,14 +120,11 @@
     height: 100%;
     border-radius: 99px;
     background: linear-gradient(90deg, #8b5cf6, #6366f1 60%, #f97316);
-    transition: width 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    transition: width 1.1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     box-shadow: 0 0 8px rgba(139,92,246,0.4);
   }
 
-  /* Badges */
-  .tech-badges {
-    margin-top: 3rem;
-  }
+  .tech-badges { margin-top: 3rem; }
 
   .section-sub {
     display: block;
@@ -154,11 +135,7 @@
     margin-bottom: 1rem;
   }
 
-  .badges-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
+  .badges-list { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 
   .badge {
     font-size: 0.78rem;

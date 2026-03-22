@@ -27,17 +27,15 @@
           class="project-card glass-card"
           class:featured={project.featured}
         >
-          <!-- Topo: ícone + seta (sem badge aqui) -->
           <div class="proj-top">
             <div class="proj-icon" aria-hidden="true">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
               </svg>
             </div>
-
             <div class="proj-top-right">
               {#if project.featured}
-                <span class="featured-badge">Destaque</span>
+                <span class="featured-badge">⭐ Destaque</span>
               {/if}
               <svg class="proj-arrow" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M7 17L17 7M17 7H7M17 7v10"/>
@@ -91,7 +89,7 @@
     gap: 0.75rem;
     padding: 1.75rem;
     text-decoration: none;
-    transition: all 0.3s ease;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
     position: relative;
     overflow: hidden;
   }
@@ -103,20 +101,17 @@
     background: radial-gradient(circle at 80% 20%, rgba(139,92,246,0.08) 0%, transparent 60%);
     opacity: 0;
     transition: opacity 0.3s ease;
+    pointer-events: none;
   }
 
   .project-card:hover {
     border-color: rgba(139,92,246,0.35);
-    box-shadow: 0 8px 32px rgba(0,0,0,0.3), 0 0 0 1px rgba(139,92,246,0.1);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
   }
-
   .project-card:hover::before { opacity: 1; }
+  .project-card.featured { border-color: rgba(139,92,246,0.22); }
 
-  .project-card.featured {
-    border-color: rgba(139,92,246,0.22);
-  }
-
-  /* Topo do card — ícone à esquerda, badge+seta à direita */
+  /* Topo: ícone esquerda, badge+seta direita — no flexbox, sem position absolute */
   .proj-top {
     display: flex;
     justify-content: space-between;
@@ -127,25 +122,24 @@
   .proj-top-right {
     display: flex;
     align-items: center;
-    gap: 0.6rem;
+    gap: 0.5rem;
   }
 
-  /* Badge inline ao lado da seta */
   .featured-badge {
     font-size: 0.65rem;
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.05em;
     text-transform: uppercase;
     color: rgba(249,115,22,0.9);
     background: rgba(249,115,22,0.1);
     border: 1px solid rgba(249,115,22,0.25);
-    padding: 0.18rem 0.55rem;
+    padding: 0.2rem 0.55rem;
     border-radius: 4px;
     white-space: nowrap;
     line-height: 1.4;
   }
 
-  .proj-icon { color: rgba(139,92,246,0.7); transition: color 0.2s; }
+  .proj-icon { color: rgba(139,92,246,0.7); transition: color 0.2s; flex-shrink: 0; }
   .project-card:hover .proj-icon { color: #a78bfa; }
 
   .proj-arrow { color: rgba(255,255,255,0.25); transition: all 0.2s; flex-shrink: 0; }
